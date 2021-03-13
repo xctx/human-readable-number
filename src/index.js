@@ -1,22 +1,23 @@
-module.exports = function toReadable (number) {
-    
-  const digitOnes = ['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'];
-  const digitTens = [,,'twenty','thirty','fourty','fifty','sixty','seventy','eighty','ninety'];
+module.exports = function toReadable(number) {
 
-  const digits = number.toString().split('').reverse();
+    if (number == 0) return 'zero';
 
-  let one = digitOnes[number];
-  if (number < 20){
-    return one;
-  }
+    const digits = number.toString().padStart(3, 0).split(''); //string-em number to look '013','002' ...
+    const ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
+        'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'
+    ];
+    const tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
 
-  let ten = digitTens[digits[0]]+' '+digitOnes[digits[1]];;
-  if ((number < 100) || (digits[1] == 0)){
-    return ten;
-  }
-  
-  if (number < 1000){
-    return digitOnes[digits[0]]+' hundred '+ ten +' '+one;
-  }
-  
+    let o = ones[digits[2]];
+    let h = ones[digits[0]];
+    let t = '';
+
+    if (+digits[1] < 2) {
+        t = ones[+(digits[1] + digits[2])];
+        o = '';
+    } else {
+        t = tens[+digits[1]];
+    }
+
+    return ((h + (!h ? '' : ' hundred ') + (!t ? '' : t + ' ' + o)).trim());
 }
